@@ -128,8 +128,7 @@
 
     <script>
       async function fetchDistance() {
-        const endpoint = "https://endpoint-delta-six.vercel.app/data";
-;
+        const endpoint = "https://endpoint-delta-six.vercel.app/api/data";
         try {
           const res = await fetch(endpoint);
           const json = await res.json();
