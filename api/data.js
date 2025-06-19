@@ -1,6 +1,6 @@
-import { MongoClient } from "mongodb";
+const { MongoClient } = require("mongodb");
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   const uri = process.env.MONGODB_URI;
   const dbName = process.env.DB_NAME;
   const collectionName = process.env.COLLECTION_NAME;
@@ -24,4 +24,4 @@ export default async function handler(req, res) {
     console.error("MongoDB error:", err);
     res.status(500).json({ error: err.message });
   }
-}
+};
