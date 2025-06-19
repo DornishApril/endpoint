@@ -1,0 +1,8 @@
+{
+  "name": "distance-api",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "mongodb": "^5.8.0"
+  }
+}
