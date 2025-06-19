@@ -1,10 +1,14 @@
-const { MongoClient } = require("mongodb");
+import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URI;
-const dbName = process.env.DB_NAME;
-const collectionName = process.env.COLLECTION_NAME;
+export default async function handler(req, res) {
+  const uri = process.env.MONGODB_URI;
+  const dbName = process.env.DB_NAME;
+  const collectionName = process.env.COLLECTION_NAME;
 
-module.exports = async (req, res) => {
+  if (!uri || !dbName || !collectionName) {
+    return res.status(500).json({ error: "Missing environment variables" });
+  }
+
   try {
     const client = await MongoClient.connect(uri, { maxPoolSize: 1 });
     const db = client.db(dbName);
@@ -13,9 +17,11 @@ module.exports = async (req, res) => {
     const latest = await collection.findOne({}, { sort: { _id: -1 } });
 
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.status(200).json({ distance: latest?.data || "No data" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Database error" });
+    res.status(200).json({ distance: latest?.data || "No data found" });
+
+    await client.close();
+  } catch (err) {
+    console.error("MongoDB error:", err);
+    res.status(500).json({ error: err.message });
   }
-};
+}
